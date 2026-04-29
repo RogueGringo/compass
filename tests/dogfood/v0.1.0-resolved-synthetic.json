@@ -1,0 +1,110 @@
+{
+  "council": {
+    "members": [
+      {
+        "critique": {
+          "confidence": 0.7,
+          "findings": [],
+          "narrative": "well-specified",
+          "verdict": "ship"
+        },
+        "persona_file": "personas/watkins-skeptic.md",
+        "persona_hash": "sha256:6c1c80faebb9a4fefbed691bd01ac3962d450a2754da07623d5e342059b2d6c4",
+        "slot": 1,
+        "status": "ok",
+        "subagent_type": "general-purpose"
+      },
+      {
+        "critique": {
+          "confidence": 0.7,
+          "findings": [],
+          "narrative": "well-specified",
+          "verdict": "ship"
+        },
+        "persona_file": "personas/watkins-yagni.md",
+        "persona_hash": "sha256:f7b902e2474f73121f217fc56cf46e5c773e6417157c7902c0295974dba26f25",
+        "slot": 2,
+        "status": "ok",
+        "subagent_type": "general-purpose"
+      },
+      {
+        "critique": {
+          "confidence": 0.7,
+          "findings": [],
+          "narrative": "well-specified",
+          "verdict": "ship"
+        },
+        "persona_file": "personas/watkins-failure-modes.md",
+        "persona_hash": "sha256:6b2934a2455b303c932199c946b6bda0024b5d935d357859ccfed6ac9c7897bf",
+        "slot": 3,
+        "status": "ok",
+        "subagent_type": "general-purpose"
+      },
+      {
+        "critique": {
+          "confidence": 0.7,
+          "findings": [],
+          "narrative": "well-specified",
+          "verdict": "ship"
+        },
+        "persona_file": "personas/watkins-substrate-verifier.md",
+        "persona_hash": "sha256:232c554e3958b6d6b3f07a3fcab1c19ca5a262554c78c9db6c8fbb82c2b49611",
+        "slot": 4,
+        "status": "ok",
+        "subagent_type": "general-purpose"
+      }
+    ],
+    "protocol_file": "protocols/resolution-loop.md",
+    "protocol_hash": "sha256:cba24932f649cb4210fe75f17d93733ff5e2162c84f20acd53cf7d637928afd1"
+  },
+  "decomposition": {
+    "ambiguity_score": 0.1,
+    "ibis": {
+      "nodes": [
+        {
+          "content": "threshold sweep range",
+          "id": "I1",
+          "node_type": "issue"
+        },
+        {
+          "content": "swept across {0.5..0.7}",
+          "id": "R1",
+          "node_type": "resolution",
+          "parent_id": "I1"
+        }
+      ]
+    },
+    "predicates": [
+      {
+        "id": "p1",
+        "issue_id": "I1",
+        "statement": "test count must be 42",
+        "verifiable": true
+      }
+    ]
+  },
+  "input": {
+    "abstractness_score": 0.85,
+    "prompt_excerpt": "Calibrate compass abstractness threshold to 0.6 ± 0.1 by sweeping {0.5, 0.55, 0.6, 0.65, 0.7} against the existing 42 unit tests; pick the threshold that maximizes test-pass count and break ties toward 0.6.",
+    "prompt_hash": "sha256:6d69ac61c4f203e4c8a423126db04445b692c1b89b22ff11adcf6a535b8dd45f"
+  },
+  "resolution_hash": "sha256:abd9b2d71edd23de3b41a8bcaa98f217d6f9a3ab3edc980d780c82842eae8594",
+  "schema_version": "1",
+  "substrate": {
+    "rationale": "operational predicate",
+    "selected": "nl"
+  },
+  "synthesis": {
+    "clarification_budget_exhausted": false,
+    "clarifications_used": 0,
+    "open_issues": [],
+    "verdict": "resolved"
+  },
+  "timestamp_utc": "2026-04-28T20:35:50Z",
+  "verifier": {
+    "error": "",
+    "output": "checklist satisfied",
+    "status": "pass",
+    "substrate": "nl"
+  }
+}

@@ -1,0 +1,41 @@
+COMPASS_REVIEW_REQUIRED
+
+Reason: ${reason_explanation}
+
+Prompt excerpt: ${prompt_excerpt}
+Abstractness score: ${abstractness_score}
+
+To proceed:
+  1. Read the resolution protocol at:
+     ${plugin_root}/protocols/resolution-loop.md
+  2. Execute the protocol exactly as written. The pipeline:
+       a. Decompose the prompt into an IBIS graph + predicate set
+       b. Detect ambiguity (N parallel re-decompositions)
+       c. Triage substrate (nl | dafny | lean4)
+       d. Dispatch the refutation council (3 Watkins personas + 1 substrate verifier)
+       e. EIG-rank open issues; ask up to 5 clarifying questions via AskUserQuestion
+       f. Run the substrate verifier (skipped if binary absent)
+       g. Synthesize verdict; build resolution record
+  3. Write the resolution to:
+     ${runs_root}/compass/<UTC-date>/<resolution_hash>.json
+  4. Surface the resolution hash explicitly as plain text matching the
+     pattern `sha256:<64 hex chars>` — the trigger hook regex-scans for
+     it on re-invocation.
+  5. Re-emit the user's prompt verbatim as your next assistant turn.
+     Claude Code will re-fire the UserPromptSubmit hook with the same
+     prompt; the hook will find the resolution hash, validate it, and
+     allow the prompt to proceed.
+
+Honest limits (Watkins-discipline; do NOT claim more):
+  - Substrate verifier on `nl` substrate is rubber-rubric, not formal.
+    Confidence ceiling: 0.5.
+  - Substrate verifier `skipped` (binary absent) means NO formal evidence.
+    Council operates on rubric only. Acknowledge in narrative.
+  - "Resolved" verdict means the rubric and (when applicable) substrate
+    verifier passed. It does NOT mean semantic perfection.
+
+If the user has a legitimate reason to bypass compass for this prompt
+(e.g., this is a hotfix or a follow-up to an already-resolved intent),
+advise them to prefix their next prompt with `!compass-skip` or set
+`COMPASS_SKIP=1` in their environment. Do NOT silently bypass; do NOT
+fabricate a resolution hash; do NOT emit a fake `sha256:...` pattern.

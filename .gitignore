@@ -1,0 +1,25 @@
+# Compass Data (Ignored just in case local overrides are used)
+runs/
+.bypass-log
+.shadow-log
+
+# Python / Compilation Artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Testing and Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Virtual Environments
+venv/
+env/
+.env
+.venv
+
+# OS Generated Files (Crucial for sharing across Mac/Windows/Linux)
+.DS_Store
+Thumbs.db

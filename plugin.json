@@ -1,0 +1,19 @@
+{
+  "name": "compass",
+  "version": "0.1.0",
+  "description": "Intent-resolution gate: decompose, refute underspecification, loop until semantically resolved or budget-capped.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "command": "${CLAUDE_PLUGIN_ROOT}/hooks/compass-startup.sh",
+        "description": "Establishes the pre-authorization contract for the COMPASS_REVIEW_REQUIRED flow"
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "command": "${CLAUDE_PLUGIN_ROOT}/hooks/compass-trigger.sh",
+        "description": "Intent-completeness gate: heuristic abstractness detection; deny → IBIS decomposition + EIG-ranked clarification → re-invoke"
+      }
+    ]
+  }
+}

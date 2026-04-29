@@ -1,0 +1,208 @@
+{
+  "council": {
+    "members": [
+      {
+        "critique": {
+          "confidence": 0.85,
+          "findings": [
+            {
+              "dimension": "completeness",
+              "evidence": "user prompt: 'the right approach for compass calibration'; I3 lists FP-rate-target / friction-budget / Watkins-compliance as open questions; pred4 explicitly verifiable: false",
+              "rationale": "Rule 2 — evidence asymmetry. The intent has no falsifiable target. 'Right' is a normative word doing the work a measurable threshold should be doing.",
+              "severity": "blocking",
+              "summary": "'The right approach' is aspirational, not a checkable success criterion"
+            },
+            {
+              "dimension": "correctness",
+              "evidence": "I1 enumerates four candidate referents (threshold / weight table / whole heuristic / LLM rewrite); I4 repeats the same ambiguity at v1.1-scope level",
+              "rationale": "Rule 4 — universality vs instances. Different determinism profiles (pred1), different test-break risk (pred2), different token-cost profiles (pred3). Treating 'calibration' as one issue lets the answer to the easiest instance masquerade as the answer to the general problem.",
+              "severity": "blocking",
+              "summary": "'Calibration' collapses four distinct problems into one word"
+            },
+            {
+              "dimension": "completeness",
+              "evidence": "I2 lists three candidate inputs as open questions; no predicate asserts any of them is collected, schema'd, or queryable",
+              "rationale": "A calibration plan whose inputs are themselves unspecified isn't a plan, it's a wish.",
+              "severity": "concern",
+              "summary": "Input signals (I2) are ungrounded — no evidence the bypass-log frequency, labels, or feedback channels exist in measurable form"
+            }
+          ],
+          "narrative": "The intent is honest about what it doesn't know but 'brainstorm the right approach' is not yet a reviewable intent, it's a pre-intent. Recommend: iterate by forcing I1 to a single referent and I3 to a single metric.",
+          "verdict": "iterate"
+        },
+        "persona_file": "personas/watkins-skeptic.md",
+        "persona_hash": "sha256:6c1c80faebb9a4fefbed691bd01ac3962d450a2754da07623d5e342059b2d6c4",
+        "slot": 1,
+        "status": "ok",
+        "subagent_type": "general-purpose"
+      },
+      {
+        "critique": {
+          "confidence": 0.82,
+          "findings": [
+            {
+              "dimension": "scope-violation",
+              "evidence": "I4: 'heuristic rewrite to LLM-based?'",
+              "rationale": "Calibration by definition tunes parameters of an existing mechanism. Replacing the heuristic with an LLM is not calibration, it is replacement, and conflicts directly with pred3 (token-free at trigger time).",
+              "severity": "blocking",
+              "summary": "I4 Position-3 (heuristic rewrite to LLM-based) is undeclared scope expansion masquerading as an option"
+            },
+            {
+              "dimension": "scope-violation",
+              "evidence": "pred4: 'change must reduce FP rate below baseline by some unspecified amount'",
+              "rationale": "Per Rule 1, conflates aspirational success criteria with declared facts.",
+              "severity": "concern",
+              "summary": "pred4 invents a quantitative FP-reduction target the user never specified"
+            },
+            {
+              "dimension": "maintainability",
+              "evidence": "I2: 'bypass-log frequency? labeled prompts? user feedback?'",
+              "rationale": "Premature abstraction: pre-commits to a multi-signal calibration framework when zero are wired up.",
+              "severity": "concern",
+              "summary": "I2 enumerates three signal sources before any one is shown to be needed"
+            }
+          ],
+          "narrative": "The decomposition is doing the user's thinking for them in a direction the user did not authorize. Collapse to I1+I3+I4-Position-1/2 only and ask the user to confirm scope.",
+          "verdict": "iterate"
+        },
+        "persona_file": "personas/watkins-yagni.md",
+        "persona_hash": "sha256:f7b902e2474f73121f217fc56cf46e5c773e6417157c7902c0295974dba26f25",
+        "slot": 2,
+        "status": "ok",
+        "subagent_type": "general-purpose"
+      },
+      {
+        "critique": {
+          "confidence": 0.78,
+          "findings": [
+            {
+              "dimension": "data-loss",
+              "evidence": "pred4 ('reduce FP rate below baseline') + I4 (scope includes 'full keyword/weight table rebuild' or 'heuristic rewrite to LLM-based')",
+              "rationale": "Predicates only constrain false-positive direction. Compass was deliberately built token-free, so there is no trace of a non-fire. Asymmetric observability + asymmetric predicate coverage = unrecoverable drift. The 'data-loss' analog is loss of guardrail coverage: prompts that should have been intercepted reach the model and produce irreversible downstream effects.",
+              "severity": "blocking",
+              "summary": "No rollback path for a calibration that silently shifts FN rate even if FP drops as required"
+            },
+            {
+              "dimension": "correctness",
+              "evidence": "I4 ('heuristic rewrite to LLM-based') vs pred1 ('deterministic') and pred3 ('token-free at trigger time')",
+              "rationale": "Any LLM-at-trigger-time calibration violates pred3 unconditionally and almost certainly pred1. The decomposition should have rejected I4's LLM branch a priori.",
+              "severity": "blocking",
+              "summary": "I4's 'heuristic rewrite to LLM-based' option directly violates pred1 and pred3 and is not eliminated by the decomposition"
+            },
+            {
+              "dimension": "completeness",
+              "evidence": "I2 ('bypass-log frequency? labeled prompts? user feedback?')",
+              "rationale": "Prompt distribution shifts will silently invalidate the calibration with no trigger to re-run.",
+              "severity": "concern",
+              "summary": "I2 input signals omit drift / distribution-shift detection; calibration is treated as one-shot"
+            }
+          ],
+          "narrative": "The decomposition's most dangerous asymmetry is that pred4 only constrains false positives while compass's token-free design makes false negatives invisible. A calibration can satisfy every stated predicate and still degrade the system in a way the system itself cannot report. Recommend iterate: add a paired FN benchmark or shadow-fire log.",
+          "verdict": "iterate"
+        },
+        "persona_file": "personas/watkins-failure-modes.md",
+        "persona_hash": "sha256:6b2934a2455b303c932199c946b6bda0024b5d935d357859ccfed6ac9c7897bf",
+        "slot": 3,
+        "status": "ok",
+        "subagent_type": "general-purpose"
+      },
+      {
+        "critique": {
+          "confidence": 0.5,
+          "findings": [],
+          "narrative": "NL completeness checklist passed (Goal / Success / Constraint sections all present). NL substrate authority is rubber-rubric — this is variance reduction over the rubric, NOT formal evidence. No Dafny/Lean ran (no formally-verifiable predicates in this intent). Watkins-Rule-2 forbids treating rubric pass as semantic resolution.",
+          "verdict": "ship"
+        },
+        "persona_file": "personas/watkins-substrate-verifier.md",
+        "persona_hash": "sha256:232c554e3958b6d6b3f07a3fcab1c19ca5a262554c78c9db6c8fbb82c2b49611",
+        "slot": 4,
+        "status": "ok",
+        "subagent_type": "synthesized-by-chairman"
+      }
+    ],
+    "protocol_file": "protocols/resolution-loop.md",
+    "protocol_hash": "sha256:cba24932f649cb4210fe75f17d93733ff5e2162c84f20acd53cf7d637928afd1"
+  },
+  "decomposition": {
+    "ambiguity_score": 0.0,
+    "ibis": {
+      "nodes": [
+        {
+          "content": "What is 'calibration' tuning? (threshold? weight table? whole heuristic?)",
+          "id": "I1",
+          "node_type": "issue"
+        },
+        {
+          "content": "What signals are the calibration inputs? (bypass-log? labeled prompts? user feedback?)",
+          "id": "I2",
+          "node_type": "issue"
+        },
+        {
+          "content": "What's the success criterion? (FP rate target? friction budget?)",
+          "id": "I3",
+          "node_type": "issue"
+        },
+        {
+          "content": "What's the v1.1 scope? (single threshold tweak? table rebuild? heuristic rewrite?)",
+          "id": "I4",
+          "node_type": "issue"
+        }
+      ]
+    },
+    "predicates": [
+      {
+        "id": "pred1",
+        "issue_id": "I4",
+        "statement": "calibration must be deterministic (same prompt → same fire/no-fire)",
+        "verifiable": true
+      },
+      {
+        "id": "pred2",
+        "issue_id": "I4",
+        "statement": "change must not break existing 42 unit tests",
+        "verifiable": true
+      },
+      {
+        "id": "pred3",
+        "issue_id": "I4",
+        "statement": "change must remain token-free at trigger time",
+        "verifiable": true
+      },
+      {
+        "id": "pred4",
+        "issue_id": "I3",
+        "statement": "change must reduce FP rate below baseline (data not yet collected)",
+        "verifiable": false
+      }
+    ]
+  },
+  "input": {
+    "abstractness_score": 1.0,
+    "prompt_excerpt": "Help me brainstorm the right approach for compass calibration.",
+    "prompt_hash": "sha256:5da3a72517b6d181c171c57d9c28fb1ee196f7f2925d5a78da98beff114e9805"
+  },
+  "resolution_hash": "sha256:dec8d842cd584c865ac5ecb80d46a26e48630db00dcadaf22f64d57626d13f32",
+  "schema_version": "1",
+  "substrate": {
+    "rationale": "Predicates pred1-pred3 are operational not theorem-shaped; pred4 explicitly unverifiable. NL is the right call.",
+    "selected": "nl"
+  },
+  "synthesis": {
+    "clarification_budget_exhausted": false,
+    "clarifications_used": 0,
+    "open_issues": [
+      "I1",
+      "I2",
+      "I3",
+      "I4"
+    ],
+    "verdict": "escalate"
+  },
+  "timestamp_utc": "2026-04-28T20:35:06Z",
+  "verifier": {
+    "error": "",
+    "output": "NL completeness checklist satisfied",
+    "status": "pass",
+    "substrate": "nl"
+  }
+}

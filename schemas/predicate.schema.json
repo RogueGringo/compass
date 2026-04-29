@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.invalid/compass/predicate.schema.json",
+  "title": "Compass Predicate",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "statement", "verifiable"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64
+    },
+    "statement": {
+      "type": "string",
+      "maxLength": 1000
+    },
+    "verifiable": {
+      "type": "boolean"
+    },
+    "substrate_hint": {
+      "type": "string",
+      "enum": ["nl", "dafny", "lean4"]
+    },
+    "issue_id": {
+      "type": "string",
+      "description": "IBIS Issue node this predicate addresses"
+    },
+    "evidence_required": {
+      "type": "string",
+      "maxLength": 500
+    }
+  }
+}

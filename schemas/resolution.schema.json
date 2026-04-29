@@ -1,0 +1,90 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.invalid/compass/resolution.schema.json",
+  "title": "Compass Resolution Record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "timestamp_utc",
+    "input",
+    "decomposition",
+    "substrate",
+    "council",
+    "verifier",
+    "synthesis",
+    "resolution_hash"
+  ],
+  "properties": {
+    "schema_version": { "const": "1" },
+    "timestamp_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["prompt_hash", "prompt_excerpt", "abstractness_score"],
+      "properties": {
+        "prompt_hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+        "prompt_excerpt": { "type": "string", "maxLength": 1000 },
+        "abstractness_score": { "type": "number", "minimum": 0.0, "maximum": 1.0 }
+      }
+    },
+    "decomposition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ibis", "predicates", "ambiguity_score"],
+      "properties": {
+        "ibis": { "type": "object" },
+        "predicates": { "type": "array", "items": { "type": "object" } },
+        "ambiguity_score": { "type": "number", "minimum": 0.0, "maximum": 1.0 }
+      }
+    },
+    "substrate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["selected", "rationale"],
+      "properties": {
+        "selected": { "enum": ["nl", "dafny", "lean4"] },
+        "rationale": { "type": "string", "maxLength": 500 }
+      }
+    },
+    "council": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["members", "protocol_file", "protocol_hash"],
+      "properties": {
+        "members": { "type": "array", "items": { "type": "object" } },
+        "protocol_file": { "type": "string" },
+        "protocol_hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+      }
+    },
+    "verifier": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["substrate", "status", "output", "error"],
+      "properties": {
+        "substrate": { "enum": ["nl", "dafny", "lean4"] },
+        "status": { "enum": ["pass", "fail", "timeout", "skipped", "error"] },
+        "output": { "type": "string" },
+        "error": { "type": "string" }
+      }
+    },
+    "synthesis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["verdict", "open_issues", "clarifications_used", "clarification_budget_exhausted"],
+      "properties": {
+        "verdict": { "enum": ["resolved", "iterate", "escalate"] },
+        "open_issues": { "type": "array", "items": { "type": "string" } },
+        "clarifications_used": { "type": "integer", "minimum": 0 },
+        "clarification_budget_exhausted": { "type": "boolean" }
+      }
+    },
+    "resolution_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  }
+}
